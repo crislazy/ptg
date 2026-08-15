@@ -3,16 +3,55 @@
 <head>
     <title>Please Touch Grass</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap" rel="stylesheet"> 
+
+    <!-- SEO STUFF -->
+    <meta name="description" content="You've spent enough time on your computer. Go outside and touch some grass! 🌱">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://pleasetouchgrass.fyi/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Please Touch Grass 🌱">
+    <meta property="og:description" content="You've spent enough time on your computer. Go outside and touch some grass!">
+    <meta property="og:url" content="https://pleasetouchgrass.fyi/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Please Touch Grass 🌱">
+    <meta name="twitter:description" content="You've spent enough time on your computer. Go outside and touch some grass!">
 </head>
 <body>
+    <div class="nav">
+        <a href="/" class="title">
+            <h1>PTG</h1>
+        </a>
+        <div class="nav-contents">
+            <a href="about">About</a>
+        </div>
+    </div>
     <div class="main">
         <h1>Please Touch Grass</h1>
-        <p>You have spent enough time on your computer. Go outside and touch some grass!</p>
-    </div>
-    <footer>
-        <p>Website is work in progress and unfinished. Made by <a href="https://crislzy.xyz" target="_blank">Cris</a>.</p>
-    </footer>
 
+        <p>
+            You have spent enough time on your computer.
+            Go outside and touch some grass!
+        </p>
+
+        <p class="global-counter">People have touched grass <span id="grass-count">0</span> times</p>
+        
+        <button id="touch-grass">🌱 Touch Grass</button>
+        <p class="message"><span id="message"></span></p>
+
+    </div>
+    
     <script defer src="https://umm.crislzy.hackclub.app/script.js" data-website-id="7078c12b-ca57-431c-a87d-0f1299957503"></script>
+    
+    <!-- DB STUFF -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="/script.js"></script>
 </body>
 </html>    
