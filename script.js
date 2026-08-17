@@ -9,18 +9,92 @@ const supabaseClient = window.supabase.createClient(
 const button = document.getElementById("touch-grass");
 const counter = document.getElementById("grass-count");
 const message = document.getElementById("message");
+const counterWrapper = document.getElementById("counter-wrapper");
 
-let cooldown = false;
+const COOLDOWN_MS = 3000;
+
+function getLastTouchTime() {
+    return parseInt(localStorage.getItem("ptg_last_touch") || "0", 10);
+}
+
+function setLastTouchTime(ts) {
+    localStorage.setItem("ptg_last_touch", ts.toString());
+}
+
+function getStreak() {
+    return parseInt(localStorage.getItem("ptg_streak") || "0", 10);
+}
+
+function setStreak(n) {
+    localStorage.setItem("ptg_streak", n.toString());
+}
+
+function updateStreak() {
+    const now = new Date();
+    const today = now.toDateString();
+    const lastDay = localStorage.getItem("ptg_last_day") || "";
+
+    if (lastDay === today) return;
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (lastDay === yesterday.toDateString()) {
+        setStreak(getStreak() + 1);
+    } else if (lastDay !== today) {
+        setStreak(1);
+    }
+
+    localStorage.setItem("ptg_last_day", today);
+}
+
+function getTimeSince(ts) {
+    const diff = Date.now() - ts;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    return "just now";
+}
+
+function renderUserInfo() {
+    const lastTouch = getLastTouchTime();
+    const streak = getStreak();
+    const infoEl = document.getElementById("user-info");
+
+    if (!infoEl) return;
+
+    let html = "";
+
+    if (streak > 0) {
+        html += `<div class="streak-badge">🔥 ${streak} day streak</div>`;
+    }
+
+    if (lastTouch > 0) {
+        html += `<p class="info-line">You last touched grass ${getTimeSince(lastTouch)}</p>`;
+    }
+
+    infoEl.innerHTML = html;
+}
 
 async function loadCount() {
+    counterWrapper.style.opacity = "0.5";
+
     const { data, error } = await supabaseClient
         .from("stats")
         .select("clicks")
         .eq("id", 1)
         .single();
 
+    counterWrapper.style.opacity = "1";
+
     if (error) {
         console.error("Failed to load grass count:", error);
+        counter.textContent = "?";
         message.textContent = "Couldn't load the grass count 😭";
         return;
     }
@@ -29,9 +103,12 @@ async function loadCount() {
 }
 
 async function touchGrass() {
-    if (cooldown) return;
+    const now = Date.now();
+    if (now - getLastTouchTime() < COOLDOWN_MS) {
+        message.textContent = "Slow down! 🌱";
+        return;
+    }
 
-    cooldown = true;
     button.disabled = true;
     message.textContent = "Touching grass... 🌱";
 
@@ -39,17 +116,17 @@ async function touchGrass() {
 
     if (error) {
         console.error("Failed to touch grass:", error);
-
         message.textContent = "Something went wrong 😭";
-        cooldown = false;
         button.disabled = false;
-
         return;
     }
 
+    setLastTouchTime(now);
+    updateStreak();
     window.location.href = "/grass";
 }
 
 button.addEventListener("click", touchGrass);
 
 loadCount();
+renderUserInfo();

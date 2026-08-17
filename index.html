@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Please Touch Grass</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +43,11 @@
             Go outside and touch some grass!
         </p>
 
-        <p class="global-counter">People have touched grass <span id="grass-count">0</span> times</p>
+        <p class="global-counter" id="counter-wrapper">People have touched grass <span id="grass-count">...</span> times</p>
         
         <button id="touch-grass">🌱 Touch Grass</button>
         <p class="message"><span id="message"></span></p>
+        <div id="user-info"></div>
 
     </div>
     
