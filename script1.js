@@ -8,26 +8,7 @@ const supabaseClient = window.supabase.createClient(
 
 const counter = document.getElementById("grass-count");
 const counterWrapper = document.getElementById("counter-wrapper");
-
-async function loadCount() {
-    counterWrapper.style.opacity = "0.5";
-
-    const { data, error } = await supabaseClient
-        .from("stats")
-        .select("clicks")
-        .eq("id", 1)
-        .single();
-
-    counterWrapper.style.opacity = "1";
-
-    if (error) {
-        console.error("Failed to load grass count:", error);
-        counter.textContent = "?";
-        return;
-    }
-
-    counter.textContent = data.clicks;
-}
+const shareBtn = document.getElementById("share-btn");
 
 function launchConfetti() {
     const container = document.createElement("div");
@@ -49,6 +30,63 @@ function launchConfetti() {
     }
 
     setTimeout(() => container.remove(), 5000);
+}
+
+function animateCounter(target) {
+    const duration = 1200;
+    const start = performance.now();
+    const from = 0;
+
+    function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(from + (target - from) * eased);
+
+        counter.textContent = current.toLocaleString();
+
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        } else {
+            counter.textContent = target.toLocaleString();
+        }
+    }
+
+    requestAnimationFrame(tick);
+}
+
+async function loadCount() {
+    counterWrapper.style.opacity = "0.5";
+
+    const { data, error } = await supabaseClient
+        .from("stats")
+        .select("clicks")
+        .eq("id", 1)
+        .single();
+
+    counterWrapper.style.opacity = "1";
+
+    if (error) {
+        console.error("Failed to load grass count:", error);
+        counter.textContent = "?";
+        return;
+    }
+
+    animateCounter(data.clicks);
+    renderShare();
+}
+
+function renderShare() {
+    if (!shareBtn) return;
+    const text = "I just touched grass! 🌱";
+    const url = "https://pleasetouchgrass.fyi";
+    shareBtn.addEventListener("click", () => {
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+            "_blank",
+            "width=550,height=420"
+        );
+    });
 }
 
 loadCount();

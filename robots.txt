@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pleasetouchgrass.fyi/sitemap.xml

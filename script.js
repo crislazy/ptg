@@ -13,6 +13,28 @@ const counterWrapper = document.getElementById("counter-wrapper");
 
 const COOLDOWN_MS = 3000;
 
+function animateCounter(target) {
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(target * eased);
+
+        counter.textContent = current.toLocaleString();
+
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        } else {
+            counter.textContent = target.toLocaleString();
+        }
+    }
+
+    requestAnimationFrame(tick);
+}
+
 function getLastTouchTime() {
     return parseInt(localStorage.getItem("ptg_last_touch") || "0", 10);
 }
@@ -99,7 +121,7 @@ async function loadCount() {
         return;
     }
 
-    counter.textContent = data.clicks;
+    animateCounter(data.clicks);
 }
 
 async function touchGrass() {

@@ -231,6 +231,16 @@ button:active {
     font-size: 0.9em;
 }
 
+/* GRASS ACTIONS */
+
+.grass-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 600px) {
