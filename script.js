@@ -1,154 +1,189 @@
-const SUPABASE_URL = "https://qoagzjhzajlswnapdvmz.supabase.co";
-const SUPABASE_KEY = "sb_publishable_4e9Hy6jqo7hXy-4X9L2cvw_3K912QK4";
+var MESSAGES = [
+    "cool. that's the whole website.",
+    "the grass says hi.",
+    "nothing happened. that's the joke.",
+    "it does not get easier. go anyway.",
+    "one lawn. zero databases.",
+    "refreshing will not help.",
+    "the grass is patient. you are not.",
+    "this message is randomized. the website is not.",
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    "you clicked a button. congratulations.",
+    "the grass remains undefeated.",
+    "have you considered going outside?",
+    "this could have been a weather app.",
+    "your screen is not grass.",
+    "the lawn is waiting.",
+    "please proceed to the nearest patch of grass.",
+    "no grass was touched during this click.",
+    "you are still here.",
+    "that's unfortunate.",
+    "maybe this time.",
+    "close the tab. you know what to do.",
+    "the outside world has been notified.",
+    "grass.exe is waiting.",
+    "touch grass. it's free.",
+    "grass has no loading screen.",
+    "the button cannot touch grass for you.",
+    "you could be touching grass right now.",
+    "this is your sign.",
+    "consider this your sign.",
+    "the sign was not subtle.",
+    "the grass is not going anywhere.",
+    "probably.",
+    "the grass has been informed.",
+    "the grass has no idea who you are.",
+    "grass does not require an account.",
+    "no login required. just grass.",
+    "no cookies. only grass.",
+    "zero cookies. one lawn.",
+    "authentication failed. touch grass instead.",
+    "connection established: outside.",
+    "status: still indoors.",
+    "status: concerning.",
+    "status: go outside.",
+    "status: grass pending.",
+    "status: lawn available.",
+    "status: touch grass.",
+    "error: insufficient grass touching.",
+    "error: too much internet.",
+    "error: outside not detected.",
+    "404: grass not touched.",
+    "500: please touch grass.",
+    "request timed out. grass is still there.",
+    "server says go outside.",
+    "the server is grass-based.",
+    "the database contains one lawn.",
+    "database query: touch grass.",
+    "SELECT * FROM grass;",
+    "UPDATE user SET location='outside';",
+    "INSERT INTO grass_touch VALUES (you);",
+    "no backend required for this.",
+    "this website has more buttons than necessary.",
+    "this button has no purpose.",
+    "the button knows.",
+    "the button is judging you.",
+    "the button cannot save you.",
+    "you clicked it again.",
+    "again?",
+    "really?",
+    "interesting choice.",
+    "bold move.",
+    "excellent clicking.",
+    "very productive.",
+    "incredibly important button press.",
+    "your contribution has been recorded.",
+    "the grass does not care about your clicks.",
+    "the lawn remains unchanged.",
+    "nothing has changed outside.",
+    "the outside world is still outside.",
+    "breaking news: grass still exists.",
+    "grass confirmed.",
+    "grass detected.",
+    "grass status: green.",
+    "lawn status: operational.",
+    "weather not included.",
+    "touching grass may require leaving the house.",
+    "unfortunately, this website cannot do that for you.",
+    "we tried sending grass through the screen.",
+    "the grass got stuck in the internet.",
+    "please wait while we locate some grass.",
+    "just kidding. go outside.",
+    "this is taking longer than touching grass.",
+    "you have spent enough time here.",
+    "this website is a distraction from grass.",
+    "ironic, isn't it?",
+    "you are procrastinating touching grass.",
+    "the irony is measurable.",
+    "the website has served its purpose.",
+    "mission: touch grass.",
+    "mission status: pending.",
+    "mission status: questionable.",
+    "mission status: go.",
+    "objective updated: grass.",
+    "new quest: touch grass.",
+    "side quest: go outside.",
+    "daily task: touch grass.",
+    "achievement unlocked: reading this.",
+    "achievement locked: touching grass.",
+    "skill issue. go outside.",
+    "have you tried grass?",
+    "grass is pretty good, actually.",
+    "five stars. would touch again.",
+    "grass review: solid.",
+    "lawn review: acceptable.",
+    "would recommend to a friend.",
+    "please tell your friends to touch grass.",
+    "grass has entered the chat.",
+    "grass left the chat.",
+    "grass is typing...",
+    "grass has no message for you.",
+    "the grass is shy.",
+    "the grass has better things to do.",
+    "the grass is outside. obviously.",
+    "you are currently farther from grass than necessary.",
+    "distance to grass: probably not far.",
+    "grass is closer than you think.",
+    "your nearest lawn is waiting.",
+    "this message could have been grass.",
+    "imagine this was grass.",
+    "🌱",
+    "grass.",
+    "touch.",
+    "please.",
+    "go.",
+    "outside.",
+    "you know what to do.",
+    "we both know what you need to do.",
+    "i'm not asking twice.",
+    "okay now actually go.",
+    "seriously.",
+    "no really.",
+    "this is the last one.",
+    "okay one more.",
+    "fine. one more.",
+    "still not grass.",
+    "still indoors?",
+    "still clicking?",
+    "still reading?",
+    "still here?",
+    "why are you still here?",
+    "there is nothing else here.",
+    "this is literally it.",
+    "the website is finished.",
+    "we're done here.",
+    "close the tab.",
+    "go touch grass.",
+    "please."
+];
 
-const button = document.getElementById("touch-grass");
-const counter = document.getElementById("grass-count");
-const message = document.getElementById("message");
-const counterWrapper = document.getElementById("counter-wrapper");
+var message = document.getElementById("message");
+var clicks = document.getElementById("clicks");
+var count = 0;
 
-const COOLDOWN_MS = 3000;
+try {
+    count = parseInt(localStorage.getItem("ptg_clicks") || "0", 10) || 0;
+} catch (err) {}
 
-function animateCounter(target) {
-    const duration = 1200;
-    const start = performance.now();
-
-    function tick(now) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.floor(target * eased);
-
-        counter.textContent = current.toLocaleString();
-
-        if (progress < 1) {
-            requestAnimationFrame(tick);
-        } else {
-            counter.textContent = target.toLocaleString();
-        }
+var renderClicks = function () {
+    if (clicks) {
+        clicks.innerHTML = "you clicked okay " + count + (count === 1 ? " time" : " times");
     }
+};
 
-    requestAnimationFrame(tick);
+var button = document.getElementById("okay");
+
+if (button && message) {
+    button.addEventListener("click", function () {
+        count++;
+
+        try {
+            localStorage.setItem("ptg_clicks", count);
+        } catch (err) {}
+
+        message.innerHTML = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+        renderClicks();
+    });
 }
 
-function getLastTouchTime() {
-    return parseInt(localStorage.getItem("ptg_last_touch") || "0", 10);
-}
-
-function setLastTouchTime(ts) {
-    localStorage.setItem("ptg_last_touch", ts.toString());
-}
-
-function getStreak() {
-    return parseInt(localStorage.getItem("ptg_streak") || "0", 10);
-}
-
-function setStreak(n) {
-    localStorage.setItem("ptg_streak", n.toString());
-}
-
-function updateStreak() {
-    const now = new Date();
-    const today = now.toDateString();
-    const lastDay = localStorage.getItem("ptg_last_day") || "";
-
-    if (lastDay === today) return;
-
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (lastDay === yesterday.toDateString()) {
-        setStreak(getStreak() + 1);
-    } else if (lastDay !== today) {
-        setStreak(1);
-    }
-
-    localStorage.setItem("ptg_last_day", today);
-}
-
-function getTimeSince(ts) {
-    const diff = Date.now() - ts;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    return "just now";
-}
-
-function renderUserInfo() {
-    const lastTouch = getLastTouchTime();
-    const streak = getStreak();
-    const infoEl = document.getElementById("user-info");
-
-    if (!infoEl) return;
-
-    let html = "";
-
-    if (streak > 0) {
-        html += `<div class="streak-badge">🔥 ${streak} day streak</div>`;
-    }
-
-    if (lastTouch > 0) {
-        html += `<p class="info-line">You last touched grass ${getTimeSince(lastTouch)}</p>`;
-    }
-
-    infoEl.innerHTML = html;
-}
-
-async function loadCount() {
-    counterWrapper.style.opacity = "0.5";
-
-    const { data, error } = await supabaseClient
-        .from("stats")
-        .select("clicks")
-        .eq("id", 1)
-        .single();
-
-    counterWrapper.style.opacity = "1";
-
-    if (error) {
-        console.error("Failed to load grass count:", error);
-        counter.textContent = "?";
-        message.textContent = "Couldn't load the grass count 😭";
-        return;
-    }
-
-    animateCounter(data.clicks);
-}
-
-async function touchGrass() {
-    const now = Date.now();
-    if (now - getLastTouchTime() < COOLDOWN_MS) {
-        message.textContent = "Slow down! 🌱";
-        return;
-    }
-
-    button.disabled = true;
-    message.textContent = "Touching grass... 🌱";
-
-    const { error } = await supabaseClient.rpc("touch_grass");
-
-    if (error) {
-        console.error("Failed to touch grass:", error);
-        message.textContent = "Something went wrong 😭";
-        button.disabled = false;
-        return;
-    }
-
-    setLastTouchTime(now);
-    updateStreak();
-    window.location.href = "/grass";
-}
-
-button.addEventListener("click", touchGrass);
-
-loadCount();
-renderUserInfo();
+renderClicks();

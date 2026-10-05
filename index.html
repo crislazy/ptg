@@ -1,60 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Please Touch Grass</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">   
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap" rel="stylesheet"> 
+    <title>please touch grass</title>
 
-    <!-- SEO STUFF -->
-    <meta name="description" content="You've spent enough time on your computer. Go outside and touch some grass! 🌱">
-    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="/style.css">
+
+    <meta name="description" content="please touch grass.">
     <link rel="canonical" href="https://pleasetouchgrass.fyi/">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Please Touch Grass 🌱">
-    <meta property="og:description" content="You've spent enough time on your computer. Go outside and touch some grass!">
+    <meta property="og:title" content="please touch grass">
+    <meta property="og:description" content="please touch grass.">
     <meta property="og:url" content="https://pleasetouchgrass.fyi/">
     <meta property="og:type" content="website">
 
-    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Please Touch Grass 🌱">
-    <meta name="twitter:description" content="You've spent enough time on your computer. Go outside and touch some grass!">
+    <meta name="twitter:title" content="please touch grass">
+    <meta name="twitter:description" content="please touch grass.">
 </head>
+
 <body>
-    <div class="nav">
-        <a href="/" class="title">
-            <h1>PTG</h1>
-        </a>
-        <div class="nav-contents">
-            <a href="about">About</a>
-        </div>
+
+    <div class="page">
+        <h1>please touch grass</h1>
+
+        <hr>
+
+        <p id="message">you know what to do.</p>
+
+        <p><input type="button" value="okay" id="okay"></p>
+
+        <hr>
+
+        <p class="small" id="clicks">you clicked okay 0 times</p>
+        <p class="small">this is the whole website. anonymous tracking by <a href="https://umami.is">umami</a>.</p>
+        <p class="small">created by <a href="https://crislzy.xyz">cris</a></p>
     </div>
-    <div class="main">
-        <h1>Please Touch Grass</h1>
 
-        <p>
-            You have spent enough time on your computer.
-            Go outside and touch some grass!
-        </p>
-
-        <p class="global-counter" id="counter-wrapper">People have touched grass <span id="grass-count">...</span> times</p>
-        
-        <button id="touch-grass">🌱 Touch Grass</button>
-        <p class="message"><span id="message"></span></p>
-        <div id="user-info"></div>
-
-    </div>
-    
     <script defer src="https://umm.crislzy.hackclub.app/script.js" data-website-id="7078c12b-ca57-431c-a87d-0f1299957503"></script>
-    
-    <!-- DB STUFF -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script defer src="/script.js"></script>
+
 </body>
-</html>    
+
+</html>
