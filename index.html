@@ -1,47 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>please touch grass</title>
-
-    <link rel="stylesheet" href="/style.css">
-
-    <meta name="description" content="please touch grass.">
-    <link rel="canonical" href="https://pleasetouchgrass.fyi/">
-
-    <meta property="og:title" content="please touch grass">
-    <meta property="og:description" content="please touch grass.">
-    <meta property="og:url" content="https://pleasetouchgrass.fyi/">
-    <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="please touch grass">
-    <meta name="twitter:description" content="please touch grass.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>please touch grass</title>
+<meta name="description" content="please touch grass.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
+<script defer src="https://umm.crislzy.hackclub.app/script.js" data-website-id="7078c12b-ca57-431c-a87d-0f1299957503"></script>
+<style>
+  :root {
+    --field: #6cbf40;
+    --ink: #17210f;
+    --soil: #5a3b22;
+    --soil-ink: #f2e6d0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --field: #3f8a2a;
+      --ink: #0d1409;
+      --soil: #3b2715;
+      --soil-ink: #e3d6bc;
+    }
+  }
+  :root[data-theme="dark"] {
+    --field: #3f8a2a;
+    --ink: #0d1409;
+    --soil: #3b2715;
+    --soil-ink: #e3d6bc;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--field);
+    color: var(--ink);
+    font-family: "Gochi Hand", "Comic Sans MS", "Chalkboard SE", cursive;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem 1.25rem 0;
+    min-height: 0;
+  }
+  h1 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(2.8rem, 11vw, 6.5rem);
+    line-height: 0.95;
+    transform: rotate(-1.5deg);
+  }
+  .sub {
+    margin: 0.9rem 0 0;
+    font-size: clamp(1.3rem, 4vw, 1.9rem);
+    transform: rotate(0.8deg);
+  }
+  .arrow { width: 56px; height: 64px; margin-top: 0.4rem; transform: rotate(6deg); }
+  .count { margin: 0.6rem 0 0; font-size: clamp(1.1rem, 3.4vw, 1.5rem); }
+  .msg { margin: 0.2rem 0 0; min-height: 1.5em; font-size: clamp(1rem, 3vw, 1.3rem); }
+  .lawn { position: relative; height: 36vh; min-height: 200px; flex: none; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+  footer {
+    background: var(--soil);
+    color: var(--soil-ink);
+    padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+    font-size: 1rem;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  footer a { color: inherit; }
+  @media (max-height: 520px) { .arrow { display: none; } }
+</style>
 </head>
-
 <body>
+<main>
+  <h1>please touch grass</h1>
+  <p class="sub">you know what to do.</p>
+  <svg class="arrow" viewBox="0 0 56 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M30 4 C22 18, 36 28, 27 42 C25 46, 26 50, 27 56"/>
+    <path d="M14 44 L27 58 L41 42"/>
+  </svg>
+  <p class="count" aria-live="polite">you touched grass <span id="n">0</span> <span id="t">times</span></p>
+  <p class="msg" id="msg"></p>
+</main>
+<div class="lawn"><canvas id="c" aria-label="a patch of grass you can touch"></canvas></div>
+<footer>check out other services from pleasetouchgrass.fyi <a href="/other.html">here</a> by <a href="https://crislzy.xyz">cris</a></footer>
 
-    <div class="page">
-        <h1>please touch grass</h1>
+<script>
+(function () {
+  var cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  var nEl = document.getElementById('n'), tEl = document.getElementById('t'), mEl = document.getElementById('msg');
+  var W = 0, H = 0, blades = [], running = false, count = 0, travel = 0, last = null;
+  var cols = ['#245f1a', '#2e7d22', '#3d9230'];
+  var notes = {
+    1: 'nice.',
+    10: 'you get it.',
+    20: "that's a screen.",
+    50: 'still a screen.',
+    100: 'okay that\u2019s enough. the real one is outside.',
+    250: 'we can wait.',
+    500: 'it\u2019s not going to get greener in here.',
+    1000: 'please. the door is right there.'
+  };
 
-        <hr>
+  function build() {
+    var dpr = window.devicePixelRatio || 1;
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    blades = [];
+    var n = Math.floor(W / 4.5);
+    for (var i = 0; i < n; i++) {
+      var h = H * (0.35 + Math.random() * 0.6);
+      blades.push({
+        x: Math.random() * W, h: h, w: 7 + Math.random() * 7,
+        c: cols[Math.floor(Math.random() * cols.length)],
+        lean: (Math.random() - 0.5) * 10, bend: 0, v: 0
+      });
+    }
+    blades.sort(function (a, b) { return a.h - b.h; });
+    draw();
+  }
 
-        <p id="message">you know what to do.</p>
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < blades.length; i++) {
+      var b = blades[i], o = b.bend + b.lean;
+      ctx.fillStyle = b.c;
+      ctx.beginPath();
+      ctx.moveTo(b.x - b.w / 2, H + 2);
+      ctx.quadraticCurveTo(b.x + o * 0.3 - b.w * 0.2, H - b.h * 0.55, b.x + o, H - b.h + Math.abs(o) * 0.25);
+      ctx.quadraticCurveTo(b.x + o * 0.3 + b.w * 0.3, H - b.h * 0.55, b.x + b.w / 2, H + 2);
+      ctx.fill();
+    }
+  }
 
-        <p><input type="button" value="okay" id="okay"></p>
+  function step() {
+    var energy = 0;
+    for (var i = 0; i < blades.length; i++) {
+      var b = blades[i];
+      b.v += -b.bend * 0.08;
+      b.v *= 0.88;
+      b.bend += b.v;
+      energy += Math.abs(b.v) + Math.abs(b.bend);
+    }
+    draw();
+    if (energy > 0.4) requestAnimationFrame(step); else running = false;
+  }
+  function kick() { if (!running) { running = true; requestAnimationFrame(step); } }
 
-        <hr>
+  function touchGrass(x, y, vx) {
+    for (var i = 0; i < blades.length; i++) {
+      var b = blades[i], dx = b.x - x;
+      if (Math.abs(dx) > 70 || y < H - b.h - 14) continue;
+      var prox = 1 - Math.abs(dx) / 70;
+      b.v += (dx >= 0 ? 1 : -1) * prox * 1.4 + vx * 0.12 * prox;
+      var lim = b.h * 0.45;
+      if (b.bend > lim) b.bend = lim; else if (b.bend < -lim) b.bend = -lim;
+    }
+    kick();
+  }
 
-        <p class="small" id="clicks">you clicked okay 0 times</p>
-        <p class="small">this is the whole website. anonymous tracking by <a href="https://umami.is">umami</a>.</p>
-        <p class="small">created by <a href="https://crislzy.xyz">cris</a></p>
-    </div>
+  function bump(by) {
+    count += by;
+    nEl.textContent = count;
+    tEl.textContent = count === 1 ? 'time' : 'times';
+    var keys = Object.keys(notes);
+    for (var i = 0; i < keys.length; i++) {
+      var k = +keys[i];
+      if (count - by < k && count >= k) mEl.textContent = notes[k];
+    }
+  }
 
-    <script defer src="https://umm.crislzy.hackclub.app/script.js" data-website-id="7078c12b-ca57-431c-a87d-0f1299957503"></script>
-    <script defer src="/script.js"></script>
-
+  function pos(e) {
+    var r = cv.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  cv.addEventListener('pointermove', function (e) {
+    var p = pos(e), vx = last ? p.x - last.x : 0;
+    touchGrass(p.x, p.y, vx);
+    if (last) {
+      travel += Math.abs(vx) + Math.abs(p.y - last.y);
+      var hits = Math.floor(travel / 90);
+      if (hits) { travel -= hits * 90; bump(hits); }
+    }
+    last = p;
+  });
+  cv.addEventListener('pointerdown', function (e) {
+    var p = pos(e); last = p; touchGrass(p.x, p.y, 0); bump(1);
+  });
+  ['pointerleave', 'pointerup', 'pointercancel'].forEach(function (ev) {
+    cv.addEventListener(ev, function () { last = null; });
+  });
+  window.addEventListener('resize', build);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+  build();
+})();
+</script>
 </body>
-
 </html>

@@ -1,46 +1,56 @@
 # please touch grass
 
-> please touch grass.
+[pleasetouchgrass.fyi](https://pleasetouchgrass.fyi)
 
-[![website](https://img.shields.io/badge/website-pleasetouchgrass.fyi-7fd66a?style=flat-square)](https://pleasetouchgrass.fyi/)
-[![license](https://img.shields.io/badge/license-MIT-7fd66a?style=flat-square)](LICENSE)
-[![HTML](https://img.shields.io/badge/made%20with-HTML%2FCSS%2FJS-7fd66a?style=flat-square)](#)
+you know what to do.
 
-that's the whole website.
 
-click the button if you want. it won't help.
+## running it
 
-## run locally
+open `index.html` in a browser. that's it.
 
-Clone the repository and open the project folder:
+to serve it locally:
 
-```bash
-git clone https://github.com/crislzy/ptg
-cd ptg
-```
-
-You can open `index.html` directly in your browser, or run it with a local server:
-
-```bash
+```sh
 npx serve .
 ```
 
-Then open the URL shown in your terminal, usually `http://localhost:3000`.
+## deploying
 
-To stop the local server, press `Ctrl+C`.
+any static host works (Cloudflare Pages, Netlify, Vercel, GitHub Pages).
 
-## editing
+- point the host at the repo root, with no build command and no output directory.
+- most hosts serve `404.html` automatically for unknown URLs.
+- the footer on the main page links to `/other.html`, so keep that filename.
 
-The random messages are in `script.js`, inside `MESSAGES`.
+## analytics
 
-The website is just HTML, CSS, and JavaScript. No framework required.
+anonymous tracking by [umami](https://umami.is). no cookies, no personal data.
+
+## the look
+
+there is no stylesheet to import. each page repeats the same few values at the top of its `<style>` block, so a tweak means editing each file.
+
+| token | light | dark |
+| --- | --- | --- |
+| `--field` (background) | `#6cbf40` | `#3f8a2a` |
+| `--ink` (text) | `#17210f` | `#0d1409` |
+| `--soil` (footer) | `#5a3b22` | `#3b2715` |
+| `--soil-ink` (footer text) | `#f2e6d0` | `#e3d6bc` |
+
+rules to keep it from turning into a template:
+
+- one flat green. no gradients, no glass, no shadows, no cards.
+- one font, all lowercase, deadpan.
+- the grass is crude on purpose.
+- one gag per page, nothing else on it.
+- the footer is always "this is also the whole website."
+
+## the grass
+
+the grass is a `<canvas>` of blades drawn as simple curved shapes. each blade is a small spring: moving a pointer over it pushes it sideways and it wobbles back.
+
 
 ## credits
 
-Background image by [Petr Kratochvil](https://www.publicdomainpictures.net/en/view-image.php?image=6090&picture=grass-background).
-
-[MIT License](LICENSE).
-
-made by [Cris](https://crislzy.xyz).
-
-> Made with help from [OpenCode](https://opencode.ai/).
+created by [cris](https://crislzy.xyz).
